@@ -1,23 +1,14 @@
-name: golang_ci
-
+name: go-ci
 on: [push]
-
 jobs:
-  build:
-    runs-on: ubuntu-16.04
-    strategy:
-      matrix:
-        go: ["1.13", "1.12"]
-    name: Go ${{ matrix.go }} sample
+  golangci-lint:
+    name: runner / golangci-lint
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup go
-        uses: actions/setup-go@v1
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v1
+        # uses: docker://reviewdog/action-golangci-lint:v1 # pre-build docker image
         with:
-          go-version: ${{ matrix.go }}
-      - name: install lint
-        run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.18.0
-      - name: lint
-        run: golangci-lint run
-      # - name: test
-      #   run: go test ./... -v
+          github_token: ${{ secrets.github_token }}
