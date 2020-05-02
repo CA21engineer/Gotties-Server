@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: お家ハッカソンGottiesチーム
+  version: 1.0.0
+  description: お家ハッカソンGottiesチーム
+  termsOfService: https://hackmd.io/VMBt036JRJu_gBM07U64ww
+servers:
+  - url: http://localhost:8080/
+    description: ローカルサーバ
+paths:
+  /articles:
+    get:
+      tags:
+        - articles
+      description: 記事一覧
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Article"
+    post:
+      tags:
+        - articles
+      description: 新規記事作成
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  required:
+                    - title
+                before:
+                  type: string
+                  format: byte
+                  required:
+                    - before
+                after:
+                  type: string
+                  format: byte
+                  required:
+                    - after
+                body:
+                  type: string
+                  required:
+                    - body
+                category_id:
+                  type: integer
+                  required:
+                    - category_id
+                user_id:
+                  type: string
+                  required:
+                    - user_id
+      responses:
+        "201":
+          description: ok
+  /articles/{id}:
+    get:
+      tags:
+        - articles
+      description: 記事詳細
+      parameters:
+        - name: id
+          in: path
+          description: articles ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: A single User model
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Article"
+components:
+  schemas:
+    Article:
+      type: object
+      required:
+        - id
+        - title
+        - before
+        - after
+        - category_id
+        - user_id
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        before:
+          type: string
+          format: byte
+        after:
+          type: string
+          format: byte
+        body:
+          type: string
+        user_id:
+          type: string
+        category:
+          type: object
+          $ref: "#/components/schemas/Category"
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Category:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        title:
+          type: string
