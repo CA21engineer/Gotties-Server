@@ -10,27 +10,31 @@ exports.articlesGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
-  "caategory" : {
-    "id" : "id",
-    "title" : "title"
-  },
+  "updated_at" : "2000-01-23T04:56:07.000+00:00",
   "before" : "",
   "user_id" : "user_id",
+  "created_at" : "2000-01-23T04:56:07.000+00:00",
   "id" : "id",
   "after" : "",
   "title" : "title",
-  "body" : "body"
+  "body" : "body",
+  "category" : {
+    "id" : "id",
+    "title" : "title"
+  }
 }, {
-  "caategory" : {
-    "id" : "id",
-    "title" : "title"
-  },
+  "updated_at" : "2000-01-23T04:56:07.000+00:00",
   "before" : "",
   "user_id" : "user_id",
+  "created_at" : "2000-01-23T04:56:07.000+00:00",
   "id" : "id",
   "after" : "",
   "title" : "title",
-  "body" : "body"
+  "body" : "body",
+  "category" : {
+    "id" : "id",
+    "title" : "title"
+  }
 } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -51,16 +55,18 @@ exports.articlesIdGET = function(id) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "caategory" : {
-    "id" : "id",
-    "title" : "title"
-  },
+  "updated_at" : "2000-01-23T04:56:07.000+00:00",
   "before" : "",
   "user_id" : "user_id",
+  "created_at" : "2000-01-23T04:56:07.000+00:00",
   "id" : "id",
   "after" : "",
   "title" : "title",
-  "body" : "body"
+  "body" : "body",
+  "category" : {
+    "id" : "id",
+    "title" : "title"
+  }
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

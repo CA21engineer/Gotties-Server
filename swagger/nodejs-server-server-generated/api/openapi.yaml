@@ -5,11 +5,8 @@ info:
   termsOfService: https://hackmd.io/VMBt036JRJu_gBM07U64ww
   version: 1.0.0
 servers:
-- url: http://localhost:3000/
+- url: http://localhost:8080/
   description: ローカルサーバ
-tags:
-- name: master
-  description: ユーザ情報API
 paths:
   /articles:
     get:
@@ -39,7 +36,7 @@ paths:
             schema:
               $ref: '#/components/schemas/body'
       responses:
-        "200":
+        "201":
           description: ok
       x-swagger-router-controller: Articles
   /articles/{id}:
@@ -91,18 +88,26 @@ components:
           type: string
         user_id:
           type: string
-        caategory:
+        category:
           $ref: '#/components/schemas/Category'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
       example:
-        caategory:
-          id: id
-          title: title
+        updated_at: 2000-01-23T04:56:07.000+00:00
         before: ""
         user_id: user_id
+        created_at: 2000-01-23T04:56:07.000+00:00
         id: id
         after: ""
         title: title
         body: body
+        category:
+          id: id
+          title: title
     Category:
       required:
       - id
