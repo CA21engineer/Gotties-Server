@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+  title: お家ハッカソンGottiesチーム
+  description: お家ハッカソンGottiesチーム
+  termsOfService: https://hackmd.io/VMBt036JRJu_gBM07U64ww
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/
+  description: ローカルサーバ
+tags:
+- name: master
+  description: ユーザ情報API
+paths:
+  /articles:
+    get:
+      tags:
+      - articles
+      description: 記事一覧
+      operationId: articlesGET
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+                x-content-type: application/json
+      x-swagger-router-controller: Articles
+    post:
+      tags:
+      - articles
+      description: 新規記事作成
+      operationId: articlesPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+      responses:
+        "200":
+          description: ok
+      x-swagger-router-controller: Articles
+  /articles/{id}:
+    get:
+      tags:
+      - articles
+      description: 記事詳細
+      operationId: articlesIdGET
+      parameters:
+      - name: id
+        in: path
+        description: articles ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: A single User model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+      x-swagger-router-controller: Articles
+components:
+  schemas:
+    Article:
+      required:
+      - after
+      - before
+      - category_id
+      - id
+      - title
+      - user_id
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        before:
+          type: string
+          format: byte
+        after:
+          type: string
+          format: byte
+        body:
+          type: string
+        user_id:
+          type: string
+        caategory:
+          $ref: '#/components/schemas/Category'
+      example:
+        caategory:
+          id: id
+          title: title
+        before: ""
+        user_id: user_id
+        id: id
+        after: ""
+        title: title
+        body: body
+    Category:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+      example:
+        id: id
+        title: title
+    body:
+      type: object
+      properties:
+        title:
+          required:
+          - title
+          type: string
+        before:
+          required:
+          - before
+          type: string
+          format: byte
+        after:
+          required:
+          - after
+          type: string
+          format: byte
+        body:
+          required:
+          - body
+          type: string
+        category_id:
+          required:
+          - category_id
+          type: integer
+        user_id:
+          required:
+          - user_id
+          type: string
