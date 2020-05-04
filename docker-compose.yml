@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./src/api:/go/src/api
+      - ./src:/go/Gotties-Server/src
     depends_on:
       - mysql
   mysql:
