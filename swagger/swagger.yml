@@ -50,10 +50,10 @@ paths:
                   type: string
                   required:
                     - body
-                category_id:
-                  type: integer
+                category_name:
+                  type: string
                   required:
-                    - category_id
+                    - category_name
                 user_id:
                   type: string
                   required:

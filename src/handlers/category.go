@@ -21,9 +21,15 @@ func (a *Category) GetCategories(c *gin.Context) {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 	}
 
+	var response responses.Categories
+
+	for _, category := range *categories {
+		responseCategory := new(responses.Category).ResponseCategory(&category)
+		response = append(response, *responseCategory)
+	}
 
 	c.JSON(200, gin.H{
-		"categorie": categories,
+		"categorie": response,
 	})
 }
 

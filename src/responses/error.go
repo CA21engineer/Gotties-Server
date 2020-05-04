@@ -9,7 +9,15 @@ type Error struct {
 
 func HTTPResponseNotFound(c *gin.Context, message string) {
 	e := Error{404, message}
-	c.JSON(404, gin.H{
+	c.AbortWithStatusJSON(404, gin.H{
+		"type": e.Type,
+		"message": e.Message,
+	})
+}
+
+func HTTPResponseBadRequest(c *gin.Context) {
+	e := Error{400, "Bad Request"}
+	c.AbortWithStatusJSON(400, gin.H{
 		"type": e.Type,
 		"message": e.Message,
 	})
@@ -17,8 +25,10 @@ func HTTPResponseNotFound(c *gin.Context, message string) {
 
 func HTTPResponseInternalServerError(c *gin.Context, message string) {
 	e := Error{500, message}
-	c.JSON(500, gin.H{
+	c.AbortWithStatusJSON(500, gin.H{
 		"type": e.Type,
 		"message": e.Message,
 	})
 }
+
+

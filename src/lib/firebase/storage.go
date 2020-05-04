@@ -6,26 +6,15 @@ type Image struct {
 	Base64 string
 }
 
-type Storage struct {
-	Base64 string
+func NewImage(base64 string) *Image {
+	return &Image{base64}
 }
 
-type StrageImpl interface {
-	UploadImage()(string error)
-	GetImage(url string)(string error)
-}
-
-func NewStrage() StrageImpl {
-	return &Storage{}
-}
-
-
-//画像を取得する
-func (s *Storage) GetImage(url string)(string error) {
-
-}
 
 //画像をアップロードする
-func (s *Storage) UploadImage()(string error) {
+func (i *Image) UploadImage()(string, error) {
+	//TODO:アップロード処理を書くよ
 
+
+	return "https://dummyimage.com/600x400/000/fff&text=img", nil
 }
