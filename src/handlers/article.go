@@ -29,11 +29,18 @@ func (a *Article) GetArticles(c *gin.Context) {
 
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
+		return
+	}
+	var response responses.Articles
+
+	for _, article := range *articles {
+		responseArticle := new(responses.Article).ResponseArticle(&article)
+		response = append(response, *responseArticle)
 	}
 
 
 	c.JSON(200, gin.H{
-		"article": articles,
+		"article":  response,
 	})
 }
 
@@ -43,10 +50,11 @@ func (a *Article) GetArticle(c *gin.Context) {
 	id := c.Param("id")
 	if err := models.DbConnect.Where("id = ?", id).First(&article).Error; err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
+		return
 	}
 
 	c.JSON(200, gin.H{
-		"article": article,
+		"article":  new(responses.Article).ResponseArticle(&article),
 	})
 }
 
@@ -63,31 +71,37 @@ func (a *Article) CreateArticle(c *gin.Context) {
 
 	//バリデーション検証
 	if errors := validator.New().Struct(f); errors != nil {
-		responses.HTTPResponseInternalServerError(c, errors.Error())
+		responses.HTTPResponseBadRequest(c)
+		return
 	}
 
-	//useridの検証
-	userId, err := firebase.NewAuth(c.PostForm("userId")).IsUserLogedIn()
+	//user_idの検証
+	userId, err := firebase.NewAuth(c.PostForm("user_id")).IsUserLogedIn()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
+		return
 	}
 
 	//imageのアップロード
 	beforeImg, err := firebase.NewImage(c.PostForm("before")).UploadImage()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
+		return
 	}
 
 	afterImg, err := firebase.NewImage(c.PostForm("after")).UploadImage()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
+		return
 	}
 
 	//categoryを検索し、もしcategoryがなかったら作成
 	category, err := models.NewCategory(c.PostForm("category_name")).FindByNameORCreate()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
+		return
 	}
+
 
 	article := models.NewArticle(
 		f.Title,
@@ -100,10 +114,12 @@ func (a *Article) CreateArticle(c *gin.Context) {
 
 	if err = article.Create(); err!= nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
+		return
 	}
 
 
-	c.JSON(204, gin.H{
-		"article": article,
+	c.JSON(200, gin.H{
+		"article":  new(responses.Article).ResponseArticle(article),
+
 	})
 }

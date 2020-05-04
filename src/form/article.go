@@ -2,12 +2,12 @@ package form
 
 
 type Article struct {
-	Title string `validate:"required`
-	Before string `validate:"required, Base64`
-	After string `validate:"required, Base64`
-	Body string `validate:"required`
-	CategoryName string `validate:"required`
-	UserId string `validate:"required`
+	Title string `validate:"required"`
+	Before string `validate:"required,base64"`
+	After string `validate:"required,base64"`
+	Body string `validate:"required"`
+	CategoryName string `validate:"required"`
+	UserId string
 }
 
 func NewArticle(title, before, after, body, categoryName, userId string) *Article {

@@ -5,6 +5,8 @@ import "github.com/jinzhu/gorm"
 type Category struct {
 	gorm.Model
 	Name string `gorm:"unique;not null"`
+	Articles []Article `gorm:"foreignkey:CategoryId"`
+
 }
 
 type Categories []Category
@@ -33,15 +35,11 @@ func (c *Category) Find(id int)(*Category, error){
 
 func (c *Category) FindByNameORCreate()(*Category, error){
 	var category Category
+	if err := DbConnect.FirstOrCreate(&category, Category{Name: c.Name}).Error; err != nil {
+			return nil, err
+	}
 	if err := DbConnect.Where("name = ?", c.Name).First(&category).Error; err != nil {
 		return nil, err
-	}
-
-	//TODO:もしレコードが存在しなかったらという条件式をつける
-	if false {
-		if err := DbConnect.Create(c).Error; err != nil {
-			return nil, err
-		}
 	}
 
 	return &category, nil
