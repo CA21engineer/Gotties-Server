@@ -2,9 +2,9 @@ FROM golang:latest
 
 RUN mkdir Gotties-Server
 
-WORKDIR /go/src/Gotties-Server/src
-
 COPY src /go/src/Gotties-Server/src
+
+WORKDIR /go/src/Gotties-Server/src
 
 
 RUN apt-get update \
@@ -13,8 +13,7 @@ RUN apt-get update \
   && go get github.com/jinzhu/gorm \
   && go get github.com/go-sql-driver/mysql \
   && go get firebase.google.com/go \
-  && github.com/joho/godotenv \
+  && go get github.com/joho/godotenv \
+  && GOOS=linux GOARCH=amd64 go build main.go
 
-
-
-CMD ["go", "run", "main.go"]
+CMD ["./main"]
