@@ -11,11 +11,11 @@ exports.articlesGET = function() {
     var examples = {};
     examples['application/json'] = [ {
   "updated_at" : "2000-01-23T04:56:07.000+00:00",
-  "before" : "",
+  "before" : "https://dummyimage.com/600x400/000/fff&text=before",
   "user_id" : "user_id",
   "created_at" : "2000-01-23T04:56:07.000+00:00",
   "id" : "id",
-  "after" : "",
+  "after" : "https://dummyimage.com/600x400/000/fff&text=after",
   "title" : "title",
   "body" : "body",
   "category" : {
@@ -24,11 +24,11 @@ exports.articlesGET = function() {
   }
 }, {
   "updated_at" : "2000-01-23T04:56:07.000+00:00",
-  "before" : "",
+  "before" : "https://dummyimage.com/600x400/000/fff&text=before",
   "user_id" : "user_id",
   "created_at" : "2000-01-23T04:56:07.000+00:00",
   "id" : "id",
-  "after" : "",
+  "after" : "https://dummyimage.com/600x400/000/fff&text=after",
   "title" : "title",
   "body" : "body",
   "category" : {
@@ -56,11 +56,11 @@ exports.articlesIdGET = function(id) {
     var examples = {};
     examples['application/json'] = {
   "updated_at" : "2000-01-23T04:56:07.000+00:00",
-  "before" : "",
+  "before" : "https://dummyimage.com/600x400/000/fff&text=before",
   "user_id" : "user_id",
   "created_at" : "2000-01-23T04:56:07.000+00:00",
   "id" : "id",
-  "after" : "",
+  "after" : "https://dummyimage.com/600x400/000/fff&text=after",
   "title" : "title",
   "body" : "body",
   "category" : {
