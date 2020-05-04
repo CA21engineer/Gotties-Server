@@ -1,19 +1,15 @@
 package handlers
 
 import (
+	"Gotties-Server/src/form"
+	"Gotties-Server/src/lib/firebase"
 	"Gotties-Server/src/models"
 	"Gotties-Server/src/responses"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator"
 )
 
-type Article struct{
-	Title string
-	Before string
-	After string
-	Body string
-	//Category *handler.Category
-	UserId string
-}
+type Article struct{}
 
 type Articles []Article
 
@@ -29,7 +25,7 @@ func NewArticle() ArticleImpl{
 
 
 func (a *Article) GetArticles(c *gin.Context) {
-	articles, err := models.NewArticle().All()
+	articles, err := new(models.Article).All()
 
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
@@ -56,12 +52,55 @@ func (a *Article) GetArticle(c *gin.Context) {
 
 
 func (a *Article) CreateArticle(c *gin.Context) {
-	article := &Article{}
-	models.DbConnect.NewRecord(article) // => 主キーが空の場合に `true` を返します。
+	f := form.NewArticle(
+		c.PostForm("title"),
+		c.PostForm("before"),
+		c.PostForm("after"),
+		c.PostForm("body"),
+		c.PostForm("category_name"),
+		c.PostForm("user_id"),
+	)
 
-	models.DbConnect.Create(&article)
+	//バリデーション検証
+	if errors := validator.New().Struct(f); errors != nil {
+		responses.HTTPResponseInternalServerError(c, errors.Error())
+	}
 
-	models.DbConnect.NewRecord(article) // => `user` が作られた後に `false` を返します。
+	//useridの検証
+	userId, err := firebase.NewAuth(c.PostForm("userId")).IsUserLogedIn()
+	if err != nil {
+		responses.HTTPResponseInternalServerError(c, err.Error())
+	}
+
+	//imageのアップロード
+	beforeImg, err := firebase.NewImage(c.PostForm("before")).UploadImage()
+	if err != nil {
+		responses.HTTPResponseInternalServerError(c, err.Error())
+	}
+
+	afterImg, err := firebase.NewImage(c.PostForm("after")).UploadImage()
+	if err != nil {
+		responses.HTTPResponseInternalServerError(c, err.Error())
+	}
+
+	//categoryを検索し、もしcategoryがなかったら作成
+	category, err := models.NewCategory(c.PostForm("category_name")).FindByNameORCreate()
+	if err != nil {
+		responses.HTTPResponseInternalServerError(c, err.Error())
+	}
+
+	article := models.NewArticle(
+		f.Title,
+		beforeImg,
+		afterImg,
+		f.Body,
+		userId,
+		category,
+	)
+
+	if err = article.Create(); err!= nil {
+		responses.HTTPResponseInternalServerError(c, err.Error())
+	}
 
 
 	c.JSON(204, gin.H{
