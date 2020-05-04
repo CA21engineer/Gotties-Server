@@ -23,12 +23,15 @@ func main() {
 	r := gin.Default()
 
 	article := handlers.NewArticle()
+	category := handlers.NewCategory()
 
 
 
 	r.GET("/articles", article.GetArticles)
 	r.GET("/articles/:id", article.GetArticle)
 	r.POST("/articles", article.CreateArticle)
+
+	r.GET("/categories", category.GetCategories)
 
 	// routes=============================
 
