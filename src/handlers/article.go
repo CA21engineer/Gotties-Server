@@ -27,11 +27,16 @@ func NewArticle() ArticleImpl{
 
 func (a *Article) GetArticles(c *gin.Context) {
 	articles, err := new(models.Article).All()
-
+	if c.Query("keyword") != "" {
+		articles, err = new(models.Article).Search(c.Query("keyword"))
+	}
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
+
+
+
 	var response responses.Articles
 
 	for _, article := range *articles {
@@ -45,7 +50,6 @@ func (a *Article) GetArticles(c *gin.Context) {
 	})
 }
 
-
 func (a *Article) GetArticle(c *gin.Context) {
 	id := c.Param("id")
 
@@ -54,8 +58,6 @@ func (a *Article) GetArticle(c *gin.Context) {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
-
-
 
 	c.JSON(200, gin.H{
 		"article":  new(responses.Article).ResponseArticle(article),
