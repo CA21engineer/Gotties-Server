@@ -2,9 +2,10 @@ package handlers
 
 import (
 	"Gotties-Server/src/form"
-	"Gotties-Server/src/lib/firebase"
+	"Gotties-Server/src/lib/aws"
 	"Gotties-Server/src/models"
 	"Gotties-Server/src/responses"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
 )
@@ -46,15 +47,18 @@ func (a *Article) GetArticles(c *gin.Context) {
 
 
 func (a *Article) GetArticle(c *gin.Context) {
-	var article models.Article
 	id := c.Param("id")
-	if err := models.DbConnect.Where("id = ?", id).First(&article).Error; err != nil {
+
+	article, err := new(models.Article).Find(id)
+	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
+
+
 	c.JSON(200, gin.H{
-		"article":  new(responses.Article).ResponseArticle(&article),
+		"article":  new(responses.Article).ResponseArticle(article),
 	})
 }
 
@@ -76,20 +80,20 @@ func (a *Article) CreateArticle(c *gin.Context) {
 	}
 
 	//user_idの検証
-	userId, err := firebase.NewAuth(c.PostForm("user_id")).IsUserLogedIn()
+	userId, err := aws.NewAuth(c.PostForm("user_id")).IsUserLogedIn()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
 	//imageのアップロード
-	beforeImg, err := firebase.NewImage(c.PostForm("before")).UploadImage()
+	beforeImg, err := aws.NewImage(c.PostForm("before")).UploadImage()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
-	afterImg, err := firebase.NewImage(c.PostForm("after")).UploadImage()
+	afterImg, err := aws.NewImage(c.PostForm("after")).UploadImage()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
@@ -102,7 +106,6 @@ func (a *Article) CreateArticle(c *gin.Context) {
 		return
 	}
 
-
 	article := models.NewArticle(
 		f.Title,
 		beforeImg,
@@ -112,14 +115,15 @@ func (a *Article) CreateArticle(c *gin.Context) {
 		category,
 	)
 
+	fmt.Println(article)
+
 	if err = article.Create(); err!= nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
-
 	c.JSON(200, gin.H{
-		"article":  new(responses.Article).ResponseArticle(article),
+		"message":  "success",
 
 	})
 }

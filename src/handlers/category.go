@@ -29,7 +29,7 @@ func (a *Category) GetCategories(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"categorie": response,
+		"categories": response,
 	})
 }
 

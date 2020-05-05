@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 )
 
@@ -12,7 +11,7 @@ type Article struct {
 	After string `gorm:"not null"`
 	Body string `gorm:"not null"`
 	UserId string `gorm:"not null"`
-	Category Category
+	Category Category `gorm:"-"`
 	CategoryId uint
 }
 
@@ -38,7 +37,6 @@ func (a *Article) All() (*Articles, error){
 		return nil, err
 	}
 
-	fmt.Println()
 	for i, s := range articles {
 		var category Category
 		DbConnect.Where("id = ?", s.CategoryId).Find(&category)
@@ -49,6 +47,21 @@ func (a *Article) All() (*Articles, error){
 
 	return &articles, nil
 }
+
+func (a *Article) Find(id string)(*Article, error){
+	var article Article
+	if err := DbConnect.Where("id = ?", id).First(&article).Error; err != nil {
+		return nil, err
+	}
+
+	var category Category
+	DbConnect.Where("id = ?", article.CategoryId).Find(&category)
+	article.Category = category
+
+	return &article, nil
+}
+
+
 
 func (a *Article) Create() error{
 

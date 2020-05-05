@@ -1,4 +1,4 @@
-package firebase
+package aws
 
 //https://firebase.google.com/docs/auth/admin/
 type Auth struct {

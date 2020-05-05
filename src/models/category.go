@@ -1,12 +1,12 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Category struct {
 	gorm.Model
 	Name string `gorm:"unique;not null"`
-	Articles []Article `gorm:"foreignkey:CategoryId"`
-
 }
 
 type Categories []Category
@@ -41,6 +41,7 @@ func (c *Category) FindByNameORCreate()(*Category, error){
 	if err := DbConnect.Where("name = ?", c.Name).First(&category).Error; err != nil {
 		return nil, err
 	}
+
 
 	return &category, nil
 }
