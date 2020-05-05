@@ -43,7 +43,29 @@ func (a *Article) All() (*Articles, error){
 		articles[i].Category = category
 	}
 
+	return &articles, nil
+}
 
+func (a *Article) Search(keyword string) (*Articles, error){
+	var categories Categories
+	if err := DbConnect.Where("name LIKE ?", "%"+keyword+"%").Find(&categories).Error; err != nil {
+		return nil, err
+	}
+	var categoryIds []uint
+	for _, v := range categories{
+		categoryIds = append(categoryIds, v.ID)
+	}
+
+	var articles Articles
+	if err := DbConnect.Where("category_id IN (?)", categoryIds).Find(&articles).Error; err != nil {
+		return nil, err
+	}
+
+	for i, s := range articles {
+		var category Category
+		DbConnect.Where("id = ?", s.CategoryId).Find(&category)
+		articles[i].Category = category
+	}
 
 	return &articles, nil
 }
