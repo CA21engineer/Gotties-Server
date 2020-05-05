@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -11,7 +12,7 @@ var DbConnect *gorm.DB
 
 func init() {
 	var err error
-	//db, err := gorm.Open("mysql", "root:password@tcp(mysql:3306)/sample?charset=utf8&parseTime=True&loc=Local")
+	//DbConnect, err := gorm.Open("mysql", "root:password@tcp(db:3306)/sample?charset=utf8&parseTime=True&loc=Local")
 	DbConnect, err = gorm.Open("mysql", "root:@/gotties_server?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err)
@@ -23,4 +24,13 @@ func init() {
 
 	//
 	DbConnect.AutoMigrate(&Article{}, &Category{})
+
+	//seed data
+	fmt.Println("============")
+	category, err := NewCategory("category").FindByNameORCreate()
+	article := NewArticle("title1", "https://dummyimage.com/600x400/000/fff&text=before1", "https://dummyimage.com/600x400/000/fff&text=after1", "texttexttexttexttexttexttexttexttexttext", "uuid", category)
+	DbConnect.Create(&article)
+	article = NewArticle("title2", "https://dummyimage.com/600x400/000/fff&text=before2", "https://dummyimage.com/600x400/000/fff&text=after2", "texttexttexttexttexttexttexttexttexttext", "uuid", category)
+	DbConnect.Create(&article)
+	fmt.Println("============")
 }

@@ -16,4 +16,5 @@ RUN apt-get update \
   && go get github.com/joho/godotenv \
   && GOOS=linux GOARCH=amd64 go build main.go
 
-CMD ["./main"]
+CMD ["sh", "./start_app.sh"]
+#CMD ["./main"]

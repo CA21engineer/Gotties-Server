@@ -5,6 +5,7 @@ import (
 	"Gotties-Server/src/lib/firebase"
 	"Gotties-Server/src/models"
 	"Gotties-Server/src/responses"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator"
 )
@@ -46,15 +47,18 @@ func (a *Article) GetArticles(c *gin.Context) {
 
 
 func (a *Article) GetArticle(c *gin.Context) {
-	var article models.Article
 	id := c.Param("id")
-	if err := models.DbConnect.Where("id = ?", id).First(&article).Error; err != nil {
+
+	article, err := new(models.Article).Find(id)
+	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
+
+
 	c.JSON(200, gin.H{
-		"article":  new(responses.Article).ResponseArticle(&article),
+		"article":  new(responses.Article).ResponseArticle(article),
 	})
 }
 
@@ -102,7 +106,6 @@ func (a *Article) CreateArticle(c *gin.Context) {
 		return
 	}
 
-
 	article := models.NewArticle(
 		f.Title,
 		beforeImg,
@@ -112,14 +115,15 @@ func (a *Article) CreateArticle(c *gin.Context) {
 		category,
 	)
 
+	fmt.Println(article)
+
 	if err = article.Create(); err!= nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
-
 	c.JSON(200, gin.H{
-		"article":  new(responses.Article).ResponseArticle(article),
+		"message":  "success",
 
 	})
 }

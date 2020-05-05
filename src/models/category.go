@@ -1,6 +1,8 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Category struct {
 	gorm.Model
@@ -41,6 +43,7 @@ func (c *Category) FindByNameORCreate()(*Category, error){
 	if err := DbConnect.Where("name = ?", c.Name).First(&category).Error; err != nil {
 		return nil, err
 	}
+
 
 	return &category, nil
 }
