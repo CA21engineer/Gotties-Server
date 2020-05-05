@@ -7,18 +7,17 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
 	"os"
+	//"github.com/aws/aws-sdk-go/service/s3"
 )
 
 
 
 func main() {
-
 	//envファイルを読み込み
 	err := godotenv.Load(fmt.Sprintf("../%s.env", os.Getenv("GO_ENV")))
 	if err != nil {
-		// .env読めなかった場合の処理
+		panic(err)
 	}
-
 
 	r := gin.Default()
 
@@ -33,7 +32,6 @@ func main() {
 
 	r.GET("/categories", category.GetCategories)
 
-	// routes=============================
 
 	r.Run(":8080")
 }

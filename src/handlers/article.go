@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"Gotties-Server/src/form"
-	"Gotties-Server/src/lib/firebase"
+	"Gotties-Server/src/lib/aws"
 	"Gotties-Server/src/models"
 	"Gotties-Server/src/responses"
 	"fmt"
@@ -80,20 +80,20 @@ func (a *Article) CreateArticle(c *gin.Context) {
 	}
 
 	//user_idの検証
-	userId, err := firebase.NewAuth(c.PostForm("user_id")).IsUserLogedIn()
+	userId, err := aws.NewAuth(c.PostForm("user_id")).IsUserLogedIn()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
 	//imageのアップロード
-	beforeImg, err := firebase.NewImage(c.PostForm("before")).UploadImage()
+	beforeImg, err := aws.NewImage(c.PostForm("before")).UploadImage()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return
 	}
 
-	afterImg, err := firebase.NewImage(c.PostForm("after")).UploadImage()
+	afterImg, err := aws.NewImage(c.PostForm("after")).UploadImage()
 	if err != nil {
 		responses.HTTPResponseInternalServerError(c, err.Error())
 		return

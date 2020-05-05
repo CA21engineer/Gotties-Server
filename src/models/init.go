@@ -12,8 +12,11 @@ var DbConnect *gorm.DB
 
 func init() {
 	var err error
-	//DbConnect, err := gorm.Open("mysql", "root:password@tcp(db:3306)/sample?charset=utf8&parseTime=True&loc=Local")
-	DbConnect, err = gorm.Open("mysql", "root:@/gotties_server?charset=utf8&parseTime=True&loc=Local")
+	//connectPath := os.Getenv("DB_USER")+":"+os.Getenv("DB_PASS")+ "@tcp("+ os.Getenv("HOST") + ":3306)/" + os.Getenv("DB") + "?charset=utf8&parseTime=True&loc=Local"
+	//DbConnect, err := gorm.Open("mysql", connectPath)
+	//DbConnect, err := gorm.Open("mysql", "root:password@tcp(db:3306)/gotties?charset=utf8&parseTime=True&loc=Local")
+
+	DbConnect, err = gorm.Open("mysql", "root:@/gotest?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err)
 	}

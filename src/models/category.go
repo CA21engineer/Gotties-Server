@@ -7,8 +7,6 @@ import (
 type Category struct {
 	gorm.Model
 	Name string `gorm:"unique;not null"`
-	Articles []Article `gorm:"foreignkey:CategoryId"`
-
 }
 
 type Categories []Category

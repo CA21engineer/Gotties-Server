@@ -11,7 +11,7 @@ type Article struct {
 	After string `gorm:"not null"`
 	Body string `gorm:"not null"`
 	UserId string `gorm:"not null"`
-	Category Category
+	Category Category `gorm:"-"`
 	CategoryId uint
 }
 
