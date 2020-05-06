@@ -7,6 +7,7 @@ import (
 type Category struct {
 	gorm.Model
 	Name string `gorm:"unique;not null"`
+	Reading string
 }
 
 type Categories []Category

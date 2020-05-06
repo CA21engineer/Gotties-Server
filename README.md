@@ -4,7 +4,7 @@
 https://hackmd.io/VMBt036JRJu_gBM07U64ww
 
 ### api 仕様書  
-https://gotties-swagger.web.app
+https://gotties-homehack.web.app/
 
 ## サーバ側構成
 言語： golang  

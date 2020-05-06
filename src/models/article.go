@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 )
 
@@ -33,6 +34,7 @@ func NewArticle(title, before, after, body, userId string, category *Category )*
 
 func (a *Article) All() (*Articles, error){
 	var articles Articles
+	fmt.Println(DbConnect)
 	if err := DbConnect.Find(&articles).Error; err != nil {
 		return nil, err
 	}

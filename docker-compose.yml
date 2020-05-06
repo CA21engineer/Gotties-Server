@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/api/Dockerfile
+    container_name: api
     ports:
       - "8080:8080"
     volumes:
@@ -12,7 +13,6 @@ services:
       - mysql
   mysql:
     build: ./docker/db
-#    image: mysql:8.0
     restart: always
     environment:
       MYSQL_USER: root
